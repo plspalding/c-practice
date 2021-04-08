@@ -12,8 +12,12 @@ bool isEmpty(Vector);
 int atIndex(int, Vector);
 void push(int, Vector*);
 void insertAt(int, int, Vector*);
+void prepend(int, Vector*);
+int pop(Vector*);
+void delete(int, Vector*);
 
-void resizeVector(Vector* v);
+void resizeVector(Vector*);
+void printVector(Vector*);
 
 struct Vector {
   int size;
@@ -33,41 +37,35 @@ int main(int argc, char* argv[]) {
   }
   vector.size = vector.capacity;
 
-  //printf("Size: %d\n", size(vector));
-  //printf("Capacity: %d\n", capacity(vector));
-  //printf("Is empty: %d\n", isEmpty(vector));
-  //printf("Element at index 0: %d\n", atIndex(0, vector));
-  //printf("Element at index 1: %d\n", atIndex(1, vector)); 
-  //printf("Element at index 2: %d\n", atIndex(2, vector));
-
-  //printf("push\n"); push(100, &vector);
-  //printf("size of vector: %d\n", vector.size); 
-  //printf("last element: %d\n", *(vector.elements + vector.size-1));
-
-  //printf("push\n"); push(200, &vector);
-  //printf("size of vector: %d\n", vector.size - 1);
-  //printf("capacity: %d\n", vector.capacity);
-  //printf("last element: %d\n", *(vector.elements + vector.size-1));
-  //
-
   printf("The size of Vector is now: %d\n", vector.size);
   printf("The capacity of the Vector is now %d\n", vector.capacity);
-
-  for (int i = 0; i < vector.size; i++) {
-    printf("%d\n", *(vector.elements+i));
-  }
+  printVector(&vector);
 
   printf("==========\n");
-
 
   insertAt(1000, 2, &vector);
   printf("The size of Vector is now: %d\n", vector.size);
   printf("The capacity of the Vector is now %d\n", vector.capacity);
-  for (int i = 0; i < vector.size-1; i++) {
-    printf("%d\n", *(vector.elements+i));
-  }
+  printVector(&vector);
+
+  printf("-----\n");
+  prepend(5000, &vector);
+  printVector(&vector);
+
+  printf("-----\n");
+  printf("Vector size: %d\n", vector.size);
+  pop(&vector);
+  printVector(&vector);
+  printf("Vector size: %d\n", vector.size);
+
+  printf("-----\n");
+  delete(2, &vector);
+  printVector(&vector);
+
   return 0;
 }
+
+
 
 int size(Vector v) {
   return v.size;
@@ -109,6 +107,23 @@ void insertAt(int value, int index, Vector* v) {
   v->size = v->size + 1;
 }
 
+void prepend(int value, Vector* v) {
+  insertAt(value, 0, v); 
+}
+
+int pop(Vector* v) {
+  if (v->size == 0) { abort(); };
+  v->size = v->size - 1;
+  *(v->elements+v->size-1) = 0;
+  return *(v->elements+v->size-1);
+}
+
+void delete(int index, Vector* v) {
+  for (int i = index; i < v->size; i++) {
+    *(v->elements+i) = *(v->elements+i+1);
+  }
+}
+
 // Resize vector
 void resizeVector(Vector* v) {
   Vector newV;
@@ -122,4 +137,8 @@ void resizeVector(Vector* v) {
   v->elements = newV.elements;
 }
 
-
+void printVector(Vector* v) {
+  for (int i = 0; i < vector.size; i++) {
+    printf("%d\n", *(vector.elements+i));
+  }
+}
