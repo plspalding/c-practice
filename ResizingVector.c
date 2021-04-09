@@ -15,6 +15,8 @@ void insertAt(int, int, Vector*);
 void prepend(int, Vector*);
 int pop(Vector*);
 void delete(int, Vector*);
+void removeItem(int, Vector*);
+int findItem(int, Vector*);
 
 void resizeVector(Vector*);
 void printVector(Vector*);
@@ -61,6 +63,16 @@ int main(int argc, char* argv[]) {
   printf("-----\n");
   delete(2, &vector);
   printVector(&vector);
+
+  printf("---Removing Item---\n");
+  removeItem(1000, &vector);
+  printf("Vector size is now %d\n", vector.size);
+  printf("Vector capacity is now %d\n", vector.capacity);
+  printVector(&vector);
+
+  printf("---Finding item---\n");
+  printf("%d\n", findItem(3, &vector));
+  printf("%d\n", findItem(1999, &vector));
 
   return 0;
 }
@@ -119,9 +131,28 @@ int pop(Vector* v) {
 }
 
 void delete(int index, Vector* v) {
-  for (int i = index; i < v->size; i++) {
+  for (int i = index; i < v->size-1; i++) {
     *(v->elements+i) = *(v->elements+i+1);
   }
+  v->size = v->size-1;
+}
+
+void removeItem(int item, Vector* v) {
+  for (int i = 0; i < v->size-1; i++) {
+    if (*(v->elements+i) == item) {
+      delete(i, v);
+      break;
+    }
+  }
+}
+
+int findItem(int item, Vector* v) {
+  for (int i = 0; i < v->size-1; i++) {
+    if (*(v->elements+i) == item) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 // Resize vector
