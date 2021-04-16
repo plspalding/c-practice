@@ -17,6 +17,10 @@ struct Node {
 int size(LinkedList);
 bool empty(LinkedList);
 int value_at(int index, LinkedList);
+void push_front(int, LinkedList*);
+void push_back(int, LinkedList*);
+int front(LinkedList);
+int last(LinkedList);
 
 int main() {
   printf("Main called\n");
@@ -77,6 +81,31 @@ int main() {
   printf("Value at index 0: %d\n", value_at(0, l2));
   printf("Value at index 1: %d\n", value_at(1, l2));
   printf("Value at index 2: %d\n", value_at(2, l2));
+
+  printf("------Insert New Element at front------\n");
+  push_front(1000, &l2);
+  printf("Value at index 0: %d\n", value_at(0, l2));
+  printf("Value at index 1: %d\n", value_at(1, l2));
+  printf("Value at index 2: %d\n", value_at(2, l2));
+
+  printf("------Insert new Element as end---------\n");
+  push_back(170, &l2);
+  push_back(69, &l2);
+  //push_back(2332, &l2);
+  printf("Value at index 0: %d\n", value_at(0, l2));
+  printf("Value at index 1: %d\n", value_at(1, l2));
+  printf("Value at index 2: %d\n", value_at(2, l2));
+  printf("Value at index 3: %d\n", value_at(3, l2));
+  printf("Value at index 4: %d\n", value_at(4, l2));
+  printf("Value at index 5: %d\n", value_at(5, l2));
+  printf("Value at index 6: %d\n", value_at(6, l2));
+  printf("Value at index 7: %d\n", value_at(7, l2));
+  printf("Value at index 8: %d\n", value_at(8, l2));
+  printf("Value at index 9: %d\n", value_at(9, l2));
+
+  printf("------First and last element-------\n");
+  printf("Front element = %d\n", front(l2));
+  printf("Last element = %d\n", last(l2));
 }
 
 int size(LinkedList l) {
@@ -103,4 +132,49 @@ int value_at(int index, LinkedList l) {
     node = node->ptr;
   }
   abort();
+}
+
+void push_front(int value, LinkedList* l) {
+  if (l->ptr == NULL) {
+    Node* node;
+    node->element = value;
+    node->ptr = NULL;
+    l->ptr = node;
+    return;
+  }
+  Node* currentHead = l->ptr;
+  Node* newNode;
+  newNode = malloc(sizeof *newNode); // Mallocing here for practice
+  newNode->element = value;
+  newNode->ptr = currentHead;
+  l->ptr = newNode;
+}
+
+// TODO: Push back not working correctly
+void push_back(int value, LinkedList* l) {
+  Node* currentNode = l->ptr;
+  while (currentNode->ptr != NULL) {
+    printf("CurrentNode->ptr->element: %d\n", currentNode->ptr->element);
+    currentNode = currentNode->ptr;
+  } 
+  Node node;
+  node.element = value;
+  printf("Node element = %d\n", node.element);
+  node.ptr = NULL;
+  currentNode->ptr = &node;
+  currentNode->ptr->element = 69;
+  printf("CurrentNode element = %d\n", currentNode->ptr->element);
+}
+
+int front(LinkedList l) {
+  return l.ptr->element; 
+}
+
+int last(LinkedList l) {
+  Node* node = l.ptr;
+
+  while (node->ptr != NULL) {
+    node = node->ptr;
+  }
+  return node->element;
 }
