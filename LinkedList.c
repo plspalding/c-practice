@@ -90,8 +90,7 @@ int main() {
 
   printf("------Insert new Element as end---------\n");
   push_back(170, &l2);
-  push_back(69, &l2);
-  //push_back(2332, &l2);
+  push_back(2332, &l2);
   printf("Value at index 0: %d\n", value_at(0, l2));
   printf("Value at index 1: %d\n", value_at(1, l2));
   printf("Value at index 2: %d\n", value_at(2, l2));
@@ -99,9 +98,6 @@ int main() {
   printf("Value at index 4: %d\n", value_at(4, l2));
   printf("Value at index 5: %d\n", value_at(5, l2));
   printf("Value at index 6: %d\n", value_at(6, l2));
-  printf("Value at index 7: %d\n", value_at(7, l2));
-  printf("Value at index 8: %d\n", value_at(8, l2));
-  printf("Value at index 9: %d\n", value_at(9, l2));
 
   printf("------First and last element-------\n");
   printf("Front element = %d\n", front(l2));
@@ -150,20 +146,36 @@ void push_front(int value, LinkedList* l) {
   l->ptr = newNode;
 }
 
-// TODO: Push back not working correctly
+// I have left this here as a reminder / need to confirm
+// I believe this code was not working as I was creating the node on the stack and
+// not on the heap. The second implementation I tried works using malloc. I am now
+// allocating the memory which I can then access later. (See function below)
+//void push_back(int value, LinkedList* l) {
+//  Node* currentNode = l->ptr;
+//  while (currentNode->ptr != NULL) {
+//    printf("CurrentNode->ptr->element: %d\n", currentNode->ptr->element);
+//    currentNode = currentNode->ptr;
+//  } 
+//  Node node;
+//  node.element = value;
+//  printf("Node element = %d\n", node.element);
+//  node.ptr = NULL;
+//  currentNode->ptr = &node;
+//  currentNode->ptr->element = 69;
+//  printf("CurrentNode element = %d\n", currentNode->ptr->element);
+//}
+
 void push_back(int value, LinkedList* l) {
   Node* currentNode = l->ptr;
   while (currentNode->ptr != NULL) {
-    printf("CurrentNode->ptr->element: %d\n", currentNode->ptr->element);
     currentNode = currentNode->ptr;
   } 
-  Node node;
-  node.element = value;
-  printf("Node element = %d\n", node.element);
-  node.ptr = NULL;
-  currentNode->ptr = &node;
-  currentNode->ptr->element = 69;
-  printf("CurrentNode element = %d\n", currentNode->ptr->element);
+  Node* node;
+  node = malloc(sizeof (LinkedList));
+  node->element = value;
+  node->ptr = NULL;
+  currentNode->ptr = node;
+  printf("Does it reach here?");
 }
 
 int front(LinkedList l) {
