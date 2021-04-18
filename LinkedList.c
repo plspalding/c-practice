@@ -24,6 +24,8 @@ void push_back(int, LinkedList*);
 int pop_back(LinkedList*);
 int front(LinkedList);
 int last(LinkedList);
+void insert(int, int, LinkedList*);
+void erase(int, LinkedList*);
 
 int main() {
   printf("Main called\n");
@@ -99,6 +101,14 @@ int main() {
   printf("------First and last element-------\n");
   printf("Front element = %d\n", front(l2));
   printf("Last element = %d\n", last(l2));
+
+  printf("----Insert----\n");
+  insert(0, 321, &l2);
+  printLinkedList(l2);
+
+  printf("----Erase----\n");
+  erase(0, &l2);
+  printLinkedList(l2);
 }
 
 void printLinkedList(LinkedList l) {
@@ -194,13 +204,15 @@ void push_back(int value, LinkedList* l) {
 }
 
 int pop_back(LinkedList* l) {
+  Node* previousNode;
   Node* currentNode = l->ptr;
   while (currentNode->ptr != NULL) {
+    previousNode = currentNode;
     currentNode = currentNode->ptr;
   }
   int value = currentNode->element;
   free(currentNode);
-  currentNode = NULL;
+  previousNode->ptr = NULL;
   return value;
 }
 
@@ -215,4 +227,47 @@ int last(LinkedList l) {
     node = node->ptr;
   }
   return node->element;
+}
+
+// Could add a size element to the linked list that gets updated in operations
+void insert(int index, int value, LinkedList* l) {
+  int currentPosition = 0;
+  Node* previousNode;
+  Node* currentNode = l->ptr;
+  while (currentNode != NULL) {
+    if (currentPosition == index) {
+      Node* newNode;
+      newNode = malloc(sizeof *newNode);
+      newNode->element = value;
+      newNode->ptr = currentNode;
+      if (index == 0) {
+        l->ptr = newNode;
+      } else {
+        previousNode->ptr = newNode;
+      }
+    }
+    currentPosition += 1;
+    previousNode = currentNode;
+    currentNode = currentNode->ptr;
+  } 
+}
+
+void erase(int index, LinkedList* l) {
+  int currentPosition = 0;
+  Node* previousNode;
+  Node* currentNode = l->ptr;
+  while (currentNode != NULL) {
+    if (currentPosition == index) {
+      if (index == 0) {
+        l->ptr = currentNode->ptr;
+        return;
+      } else {
+        previousNode->ptr = currentNode->ptr;
+        return;
+      }
+    }
+    previousNode = currentNode;
+    currentNode = currentNode->ptr;
+    currentPosition += 1;
+  }
 }
