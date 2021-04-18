@@ -14,11 +14,14 @@ struct Node {
   int element;
 };
 
+void printLinkedList(LinkedList l);
 int size(LinkedList);
 bool empty(LinkedList);
 int value_at(int index, LinkedList);
 void push_front(int, LinkedList*);
+int pop_front(LinkedList*);
 void push_back(int, LinkedList*);
+int pop_back(LinkedList*);
 int front(LinkedList);
 int last(LinkedList);
 
@@ -34,10 +37,6 @@ int main() {
   node.element = 5;
 
   list.ptr = &node;
-
-  // struct Node node1;
-  // node1.ptr = NULL;
-  // node.element = 10;
 
   printf("Node pointer = %p\n", node.ptr);
   printf("Element = %d\n", node.element);
@@ -78,30 +77,38 @@ int main() {
   l2.ptr = &n0;
   printf("Count of l2 = %d\n", size(l2));
   fputs(empty(l2) ? "true\n" : "false\n", stdout);
-  printf("Value at index 0: %d\n", value_at(0, l2));
-  printf("Value at index 1: %d\n", value_at(1, l2));
-  printf("Value at index 2: %d\n", value_at(2, l2));
+  printLinkedList(l2);
 
   printf("------Insert New Element at front------\n");
   push_front(1000, &l2);
-  printf("Value at index 0: %d\n", value_at(0, l2));
-  printf("Value at index 1: %d\n", value_at(1, l2));
-  printf("Value at index 2: %d\n", value_at(2, l2));
+  printLinkedList(l2);
 
-  printf("------Insert new Element as end---------\n");
+  printf("----Pop element at front----\n");
+  pop_front(&l2);
+  printLinkedList(l2);
+
+  printf("------Insert new Element at end---------\n");
   push_back(170, &l2);
   push_back(2332, &l2);
-  printf("Value at index 0: %d\n", value_at(0, l2));
-  printf("Value at index 1: %d\n", value_at(1, l2));
-  printf("Value at index 2: %d\n", value_at(2, l2));
-  printf("Value at index 3: %d\n", value_at(3, l2));
-  printf("Value at index 4: %d\n", value_at(4, l2));
-  printf("Value at index 5: %d\n", value_at(5, l2));
-  printf("Value at index 6: %d\n", value_at(6, l2));
+  printLinkedList(l2);
+
+  printf("----Pop element at back of list----\n");
+  printf("Popped element = %d\n", pop_back(&l2));
+  printLinkedList(l2);
 
   printf("------First and last element-------\n");
   printf("Front element = %d\n", front(l2));
   printf("Last element = %d\n", last(l2));
+}
+
+void printLinkedList(LinkedList l) {
+  int count = 0;
+  Node* currentNode = l.ptr;
+  while (currentNode != NULL) {
+    printf("Element at position: %d = %d\n", count, currentNode->element); 
+    count += 1;
+    currentNode = currentNode->ptr;
+  }
 }
 
 int size(LinkedList l) {
@@ -146,6 +153,15 @@ void push_front(int value, LinkedList* l) {
   l->ptr = newNode;
 }
 
+int pop_front(LinkedList* l) {
+  Node* firstNode = l->ptr;
+  Node* secondNode = firstNode->ptr;
+  l->ptr = secondNode;
+  int value = firstNode->element;
+  free(firstNode); // <-- Look into when I need to use free
+  return value;
+}
+
 // I have left this here as a reminder / need to confirm
 // I believe this code was not working as I was creating the node on the stack and
 // not on the heap. The second implementation I tried works using malloc. I am now
@@ -175,7 +191,17 @@ void push_back(int value, LinkedList* l) {
   node->element = value;
   node->ptr = NULL;
   currentNode->ptr = node;
-  printf("Does it reach here?");
+}
+
+int pop_back(LinkedList* l) {
+  Node* currentNode = l->ptr;
+  while (currentNode->ptr != NULL) {
+    currentNode = currentNode->ptr;
+  }
+  int value = currentNode->element;
+  free(currentNode);
+  currentNode = NULL;
+  return value;
 }
 
 int front(LinkedList l) {
