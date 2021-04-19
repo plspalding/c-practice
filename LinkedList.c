@@ -26,6 +26,7 @@ int front(LinkedList);
 int last(LinkedList);
 void insert(int, int, LinkedList*);
 void erase(int, LinkedList*);
+void reverse(LinkedList*);
 
 int main() {
   printf("Main called\n");
@@ -269,5 +270,16 @@ void erase(int index, LinkedList* l) {
     previousNode = currentNode;
     currentNode = currentNode->ptr;
     currentPosition += 1;
+  }
+}
+
+void reverse(LinkedList* l) {
+  if (l->ptr == NULL || l->ptr->ptr == NULL) { return; }
+  Node* currentNode = l->ptr;;
+  Node* prevNode;
+  Node* nextNode = l->ptr->ptr;;
+
+  while (currentNode->ptr != NULL) {
+
   }
 }
